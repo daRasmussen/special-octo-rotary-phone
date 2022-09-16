@@ -1,8 +1,11 @@
 const chai = require('chai');
-let assert = chai.assert;
+const assert = chai.assert;
 const ConvertHandler = require('../controllers/convertHandler.js');
 
-let convertHandler = new ConvertHandler();
+const convertHandler = new ConvertHandler();
+
+const Units = require("../Units.js");
+const ui = new Units();
 
 suite('Unit Tests', function(){
     suite("ConvertHandler number input handler", function() {
@@ -47,9 +50,9 @@ suite('Unit Tests', function(){
             assert.strictEqual(r, e);
         });
     });
-    suite("ConverHandler unit input handler", function() {
+    suite.only("ConverHandler unit input handler", function() {
         test("convertHandler should correctly read each valid input unit.", function() {
-            const units = ["L", "gal", "mi", "km", "lbs", "kg"];
+            const units = ui.getUnits();
             for(const unit of units) {
                 const n = Math.random() + 10
                 const i = `${n.toFixed(2)}${unit}`;
@@ -86,6 +89,15 @@ suite('Unit Tests', function(){
                assert.typeOf(r, "string");
            }
         });
+    });
+    test("convertHandler should correctly convert gal to L", function() {
+        const n = Math.random() + 10;
+        const u = "GAL";
+        const galToL = 3.78541;
+        const r = convertHandler.convert(n, u);
+        const e = Number((n * galToL).toFixed(5));
+        assert.strictEqual(r, e);
+        assert.typeOf(r, "number");
     });
     suite("ConvertHandler conversion", function() {
         test("convertHandler should correctly convert gal to L", function() {
