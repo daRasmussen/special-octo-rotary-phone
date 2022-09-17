@@ -9,6 +9,72 @@ const Units = require("../Units.js");
 const ui = new Units();
 
 suite('Functional Tests', function() {
+    suite('GET /api/convert?input=1l', function() {
+        test("?input=1l", function(done) {
+          const f = 3.78541;
+          const v = 1;
+          const u = "L";
+          const ut = "gal";
+          const i = `${v}${u}`;
+          const e = (v * (1 / f)).toFixed(5);
+          chai
+           .request(server)
+           .get(`/api/convert/?input=${i}`)
+           .end(function(_, res) {
+             assert.equal(res.status, 200, 'Reponse status should be 200 OK');
+             const { initNum, initUnit, returnUnit, returnNum } = JSON.parse(res.text);
+             assert.strictEqual(initNum, v, "InitNum should be 1");
+             assert.strictEqual(initUnit, u, "InitUnit should be L");
+             assert.strictEqual(returnUnit, ut, "Return value should be gal");
+             assert.strictEqual(returnNum, Number(e));
+             done();
+           });
+        });
+    });
+    suite('GET /api/convert?input=10gal', function() {
+        test("?input=10gal", function(done) {
+          const f = 3.78541;
+          const v = 10;
+          const u = "gal";
+          const ut = "L";
+          const i = `${v}${u}`;
+          const e = (v * f).toFixed(5);
+          chai
+           .request(server)
+           .get(`/api/convert/?input=${i}`)
+           .end(function(_, res) {
+             assert.equal(res.status, 200, 'Reponse status should be 200 OK');
+             const { initNum, initUnit, returnUnit, returnNum } = JSON.parse(res.text);
+             assert.strictEqual(initNum, v, "InitNum should be 10");
+             assert.strictEqual(initUnit, u, "InitUnit should be gal");
+             assert.strictEqual(returnUnit, ut, "Return value should be L");
+             assert.strictEqual(returnNum, Number(e));
+             done();
+           });
+        });
+    });
+    suite('GET /api/convert?input=1gal', function() {
+        test("?input=1gal", function(done) {
+          const f = 3.78541;
+          const v = 1;
+          const u = "gal";
+          const ut = "L";
+          const i = `${v}${u}`;
+          const e = (v * f).toFixed(5);
+          chai
+           .request(server)
+           .get(`/api/convert/?input=${i}`)
+           .end(function(_, res) {
+             assert.equal(res.status, 200, 'Reponse status should be 200 OK');
+             const { initNum, initUnit, returnUnit, returnNum } = JSON.parse(res.text);
+             assert.strictEqual(initNum, v, "InitNum should be 1");
+             assert.strictEqual(initUnit, u, "InitUnit should be gal");
+             assert.strictEqual(returnUnit, ut, "Return value should be L");
+             assert.strictEqual(returnNum, Number(e));
+             done();
+           });
+        });
+    });
     suite('GET /api/convert?input=10L', function() {
         test("?input=10L", function(done) {
           const f = 3.78541;

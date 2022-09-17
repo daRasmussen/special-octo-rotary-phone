@@ -37,6 +37,8 @@ function ConvertHandler() {
   this.getUnit = function(input) {
     let result = input.split("").filter(v => !parseInt(v === "0" ? 1 : v) && v !== ".").join("");
     const units = ui.getUnits();
+    result = result === "l" ? "L" : result; 
+    // console.log(result);
     if(units.includes(result)) {
           return result;
     } else {

@@ -171,5 +171,5 @@ suite('Unit Tests', function(){
               assert.typeOf(r, "number")
             }
         });
-    })
+    });
 });
