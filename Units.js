@@ -79,6 +79,9 @@ for(const u of db) {
     unitName[u.camel.unit] = u.camel.name;
 }
 
+unitChild["L"] = "gal";
+console.log(unitChild);
+
 function Units() {
   this.getDb = () => db;
   this.getNames = () => names;

@@ -45,17 +45,6 @@ function ConvertHandler() {
   };
   
   this.getReturnUnit = function(initUnit) {
-    // const units = {
-    //     "L": "gal",
-    //     "l": "gal",
-    //     "Kg": "lbs",
-    //     "kg": "lbs",
-    //     "Km": "mi",
-    //     "km": "mi",
-    //     "gal": "L",
-    //     "lbs": "Kg",
-    //     "mi": "Km"
-    // };
     const units = ui.getUnitChild();
     const inUnit = this.getUnit(initUnit);
     let result = units[inUnit];
@@ -64,17 +53,6 @@ function ConvertHandler() {
   };
 
   this.spellOutUnit = function(unit) {
-      // const units = {
-      //     "L": "liter",
-      //     "l": "liter",
-      //     "Kg": "kilograms",
-      //     "kg": "kilograms",
-      //     "Km": "kilometers",
-      //     "km": "kilometers",
-      //     "gal": "gallons",
-      //     "lbs": "pounds",
-      //     "mi": "miles",
-      // };
     const units = ui.getUnitName();
     let result = units[unit];
     return result;

@@ -50,7 +50,7 @@ suite('Unit Tests', function(){
             assert.strictEqual(r, e);
         });
     });
-    suite.only("ConverHandler unit input handler", function() {
+    suite("ConverHandler unit input handler", function() {
         test("convertHandler should correctly read each valid input unit.", function() {
             const units = ui.getUnits();
             for(const unit of units) {
@@ -69,23 +69,21 @@ suite('Unit Tests', function(){
             }, Error)
         });
         test("convertHandler should return the correct return unit for each valid input unit", function() {
-            const units = ["gal", "lbs", "mi"];
-            const eUnits = ["L", "Kg", "Km"];
-            for (const [index, unit] of units.entries()) {
+            const unitChild = ui.getUnitChild();
+            for(const unit of Object.keys(unitChild)) {
                 const n = Math.random() + 10;
                 const i = `${n.toFixed(2)}${unit}`;
-                const e = `${eUnits[index]}`;
+                const e = `${unitChild[unit]}`;
                 const r = convertHandler.getReturnUnit(i);
                 assert.strictEqual(e, r);
                 assert.typeOf(r, "string");
             }
         });
         test("convertHandler should correctly return the spelled-out string unit for each valid input", function() {
-           const units = [ "L", "Kg", "Km", "gal", "lbs", "mi" ];
-           const spelled = [ "liter", "kilograms", "kilometers", "gallons", "pounds", "miles" ];
-           for(const [index, unit] of units.entries() ) {
+           const unitName = ui.getUnitName();
+           for(const unit of Object.keys(unitName)) {
                const r = convertHandler.spellOutUnit(unit);
-               assert.strictEqual(r, spelled[index]);
+               assert.strictEqual(r, unitName[unit]);
                assert.typeOf(r, "string");
            }
         });
@@ -100,68 +98,78 @@ suite('Unit Tests', function(){
         assert.typeOf(r, "number");
     });
     suite("ConvertHandler conversion", function() {
+        const galToL = 3.78541;
+        const miToKm = 1.60934;
+        const lbsToKg = 0.453592;
+        const decimals = 5; 
+        const convert = (n, f) => Number((n * f).toFixed(decimals));
+        const inverse = (n, f) => Number((n * ( 1 / f)).toFixed(decimals));
+
         test("convertHandler should correctly convert gal to L", function() {
             const n = Math.random() + 10;
             const u = "gal";
-            const galToL = 3.78541;
             const r = convertHandler.convert(n, u);
-            const e = Number((n * galToL).toFixed(5));
+            const e = convert(n, galToL);
             assert.strictEqual(r, e);
             assert.typeOf(r, "number");
         });
         test("convertHandler should correctly convert L to gal", function() {
             const n = Math.random() + 10;
             const u = "L";
-            const galToL = 3.78541;
             const r = convertHandler.convert(n, u);
-            const e = Number((n * (1 / galToL)).toFixed(5));
+            const e = inverse(n, galToL);
             assert.strictEqual(r, e);
             assert.typeOf(r, "number");
         });
-        test("convertHandler should correctly convert mi to km", function() {
+        test("convertHandler should correctly convert mi to Km", function() {
             const n = Math.random() + 10;
             const u = "mi";
-            const miToKm = 1.60934;
             const r = convertHandler.convert(n, u);
-            const e = Number((n * miToKm).toFixed(5));
+            const e = convert(n, miToKm);
             assert.strictEqual(r, e);
             assert.typeOf(r, "number");
         });
-        test("convertHandler should correctly convert km to mi", function() {
+        test("convertHandler should correctly convert Km to mi", function() {
             const n = Math.random() + 10;
             const u = "Km";
-            const miToKm = 1.60934;
             const r = convertHandler.convert(n, u);
-            const e = Number((n * (1 / miToKm)).toFixed(5));
+            const e = inverse(n, miToKm);
             assert.strictEqual(r, e);
             assert.typeOf(r, "number");
         });
-        test("convertHandler should correctly convert lbs to kg", function() {
+        test("convertHandler should correctly convert lbs to Kg", function() {
             const n = Math.random() + 10; 
             const u = "lbs";
-            const lbsToKg = 0.453592;
             const r = convertHandler.convert(n, u);
-            const e = Number((n * lbsToKg).toFixed(5));
+            const e = convert(n, lbsToKg);
             assert.strictEqual(r, e);
             assert.typeOf(r, "number");
         });
         test("convertHandler should correctly convert Kg to lbs", function() {
             const n = Math.random() + 10; 
             const u = "Kg";
-            const lbsToKg = 0.453592;
             const r = convertHandler.convert(n, u);
-            const e = Number((n * (1 / lbsToKg)).toFixed(5));
+            const e = inverse(n, lbsToKg);
             assert.strictEqual(r, e);
             assert.typeOf(r, "number");
         });
-        test("convertHandler should correctly convert kg to lbs", function() {
-            const n = Math.random() + 10; 
-            const u = "kg";
-            const lbsToKg = 0.453592;
-            const r = convertHandler.convert(n, u);
-            const e = Number((n * (1 / lbsToKg)).toFixed(5));
-            assert.strictEqual(r, e);
-            assert.typeOf(r, "number");
+        test("convertHandler should correctly convert units, non case sensetive", function() {
+            const units = ui.getUnits();
+            const c = {
+                lbs: (n) => convert(n, lbsToKg),
+                kg: (n) => inverse(n, lbsToKg),
+                mi: (n) => convert(n, miToKm),
+                km: (n) => inverse(n, miToKm),
+                gal: (n) => convert(n, galToL),
+                l: (n) => inverse(n, galToL)
+            };
+            for(const unit of units) {
+              const n = Math.random() + 10;
+              const r = convertHandler.convert(n, unit);
+              const e = c[unit.toLowerCase()](n)
+              assert.strictEqual(r, e);
+              assert.typeOf(r, "number")
+            }
         });
     })
 });
