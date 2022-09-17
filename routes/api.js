@@ -10,7 +10,6 @@ module.exports = function (app) {
   app.route("/api/convert").get(function(req, res) {
     try {
       const { query: { input }} = req;
-      console.log("input: ", input);
       const i = input || "";
       const initNum = c.getNum(i);
       const initUnit = c.getUnit(i) !== "L" ? c.getUnit(i).toLowerCase(): "L";

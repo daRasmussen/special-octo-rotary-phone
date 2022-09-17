@@ -14,8 +14,23 @@ function ConvertHandler() {
       result = parseFloat(input);
     } else if (isFrac) {
         if (isValidFrac) {
-            result = eval(str);
-        } else {
+            const units = ui.getUnits();
+            let unitFound = {
+                unit: "",
+                value: ""
+            };
+            for(const unit of units) {
+                if (str.includes(unit)) {
+                    unitFound.unit = unit;
+                    unitFound.value = str.split(unit)[0]; 
+                }
+            }
+            if(unitFound.unit && unitFound.value) {
+                result = eval(unitFound.value);
+            } else {
+                result = eval(str);
+            }
+        } else {           
             const v = str.split("/").filter(function(v) {
                 const isFloat = v.split(".").length > 1;
                 const isNumber = Number(v);
@@ -46,15 +61,13 @@ function ConvertHandler() {
     } else if (!isFloat && !isFrac) {
         result = parseInt(input);
     }
-
     return result ? result : 1;
   };
   
   this.getUnit = function(input) {
-    let result = input.split("").filter(v => !parseInt(v === "0" ? 1 : v) && v !== ".").join("");
+    let result = input.split("").filter(v => !parseInt(v === "0" ? 1 : v) && v !== "." && v !== "/").join("");
     const units = ui.getUnits();
     result = result === "l" ? "L" : result; 
-    // console.log(result);
     if(units.includes(result)) {
           return result;
     } else {

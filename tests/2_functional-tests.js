@@ -111,6 +111,28 @@ suite('Functional Tests', function() {
            });
         });
     });
+    suite('GET /api/convert?input=1/5mi', function() {
+        test("?input=1/5mi", function(done) {
+          const f = 1.60934;
+          const v = "1/5";
+          const u = "mi";
+          const ut = "km";
+          const i = `${v}${u}`;
+          const e = (parseFloat(v) * (1 / f)).toFixed(5);
+          chai
+           .request(server)
+           .get(`/api/convert/?input=${i}`)
+           .end(function(_, res) {
+             assert.equal(res.status, 200, 'Reponse status should be 200 OK');
+             const { initNum, initUnit, returnUnit, returnNum } = JSON.parse(res.text);
+             assert.strictEqual(initNum, v, "InitNum should be 0.2");
+             assert.strictEqual(initUnit, u, "InitUnit should be mi");
+             assert.strictEqual(returnUnit, ut, "Return value should be km");
+             assert.strictEqual(returnNum, Number(e));
+             done();
+           });
+        });
+    });
     suite('GET /api/convert?input=32g', function() {
         test("?input=32g", function(done) {
             const i = `32g`;
