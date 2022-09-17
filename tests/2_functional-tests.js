@@ -139,6 +139,20 @@ suite('Functional Tests', function() {
               });
         });
     });
+    suite('GET /api/convert?input=1//2min', function() {
+        test("?input=1//2min", function(done) {
+            const i = "1//2min";
+            const e = "invalid number and unit";
+            chai
+              .request(server)
+              .get(`/api/convert/?input=${i}`)
+              .end(function(_, res) {
+                  assert.equal(res.status, 200, 'Reponse status should be 200 OK');
+                  assert.strictEqual(res.text, e, 'Should be able to handle invalid units');
+                  done();
+              });
+        });
+    });
     suite('GET /api/convert?input=3/7.2/4kilomegagram', function() {
         test("?input=3/7.2/4kg", function(done) {
             const i = "3/7.2/4kilomegagram";

@@ -24,7 +24,23 @@ function ConvertHandler() {
             if(v[0].split("").length > 5) {
               throw new Error("invalid number and unit");
             } else {
-              throw new Error("invalid number");
+                const search = (target) => {
+                    let tmp = 0;
+                    str.split("").forEach((v, i) => {
+                        if(v === target) {
+                            tmp += 1;
+                        }
+                    });
+                    return tmp;
+                }
+                const numberOfDashes = search("/");
+                const re = str.replace(/\d+/g, '').split("").filter(v => v !== "/").filter(v => v !== ".").join("");
+                const units = ui.getUnits();
+                const notUnit = !units.includes(re);
+                if (numberOfDashes !== 1 && notUnit) {
+                    throw new Error("invalid number and unit");
+                }
+                throw new Error("invalid number");
             }
         }
     } else if (!isFloat && !isFrac) {
