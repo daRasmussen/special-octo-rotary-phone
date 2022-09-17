@@ -22,7 +22,7 @@ function ConvertHandler() {
                 return isFloat || isNumber ? "" : v;
             });
             if(v[0].split("").length > 5) {
-              throw new Error("invalid number and data");
+              throw new Error("invalid number and unit");
             } else {
               throw new Error("invalid number");
             }

@@ -142,7 +142,7 @@ suite('Functional Tests', function() {
     suite('GET /api/convert?input=3/7.2/4kilomegagram', function() {
         test("?input=3/7.2/4kg", function(done) {
             const i = "3/7.2/4kilomegagram";
-            const e = "invalid number and data";
+            const e = "invalid number and unit";
             chai
               .request(server)
               .get(`/api/convert/?input=${i}`)
