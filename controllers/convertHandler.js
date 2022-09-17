@@ -86,7 +86,7 @@ function ConvertHandler() {
   this.spellOutUnit = function(unit) {
     const units = ui.getUnitName();
     let result = units[unit];
-    return result;
+    return result + "s";
   };
   
   this.convert = function(initNum, initUnit) {

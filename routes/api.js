@@ -11,20 +11,25 @@ module.exports = function (app) {
     try {
       const { query: { input }} = req;
       const i = input || "";
+      console.log("input: ", input);
       const initNum = c.getNum(i);
       const initUnit = c.getUnit(i) !== "L" ? c.getUnit(i).toLowerCase(): "L";
       const returnNum = c.convert(initNum, initUnit);
       const returnUnit = c.getReturnUnit(i) !== "L" ? c.getReturnUnit(i).toLowerCase() : "L";
-      const spellOutUnit = c.spellOutUnit(returnUnit);
-      const string = c.getString(initNum, initUnit, returnNum, spellOutUnit);
-
-      return res.json({
+      const spellOut = {
+          init: c.spellOutUnit(initUnit),
+          return: c.spellOutUnit(returnUnit)
+      };
+      const string = c.getString(initNum, spellOut.init, returnNum, spellOut.return);
+      const ans = {
           initNum,
           initUnit,
           returnNum,
           returnUnit,
           string
-      });
+      };
+      console.log(ans)
+      return res.json(ans);
     } catch (e) {
         const { message } = e;
         return res.send(message);
