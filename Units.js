@@ -2,13 +2,13 @@ const toCamel = (v) => `${v.split("")[0].toUpperCase()}${v.substring(1)}`;
 const db = [
   {
     name: "liter",
-    unit: "l",
+    unit: "L",
     child: "gal"
   },
   {
     name: "gallon",
     unit: "gal",
-    child: "l"
+    child: "L"
   },
   {
     name: "mile",
@@ -53,6 +53,8 @@ const db = [
     }
 });
 
+// console.log(db)
+
 const names = [
     ...db.map(o => o.name),
     ...db.map(o => o.plural),
@@ -73,19 +75,22 @@ const unitName = {};
 for(const u of db) {
     unitChild[u.unit] = u.child;
     unitName[u.unit] = u.name;
-    unitChild[u.upper.unit] = u.upper.child;
-    unitName[u.upper.unit] = u.upper.name;
-    unitChild[u.camel.unit] = u.camel.child
-    unitName[u.camel.unit] = u.camel.name;
+    if (u.upper.unit !== "L") {
+      unitChild[u.upper.unit] = u.upper.child;
+      unitName[u.upper.unit] = u.upper.name;
+    }
+    if (u.camel.unit !== "L") {
+      unitChild[u.camel.unit] = u.camel.child
+      unitName[u.camel.unit] = u.camel.name;
+    }
 }
 
-unitChild["L"] = "gal";
-console.log(unitChild);
+// console.log(unitChild);
 
 function Units() {
   this.getDb = () => db;
   this.getNames = () => names;
-  this.getUnits = () => units;
+  this.getUnits = () => Array.from(new Set(units));
   this.getUnitChild = () => unitChild;
   this.getUnitName = () => unitName;
 }
