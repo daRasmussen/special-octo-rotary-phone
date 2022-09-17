@@ -1,7 +1,23 @@
-code {
-    background-color: whitesmoke;
+* {
+  margin: 0px;
+  padding: 0px;
 }
 
-section, header {
-    margin: 50px;
+body {
+  padding: 10px;
+}
+
+.issue {
+  margin: 20px;
+  padding: 5px;
+  width: 60%;
+  border: 2px solid black;
+}
+
+.closed {
+  background-color: lightgrey;
+}
+
+.id {
+  font-size: 10.5px;
 }
