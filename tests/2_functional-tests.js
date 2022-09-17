@@ -9,6 +9,20 @@ const Units = require("../Units.js");
 const ui = new Units();
 
 suite('Functional Tests', function() {
+    suite('GET /api/convert?input=1//2gal', function() {
+        test("?input=1//2gal", function(done) {
+          const i = `1//2gal`;
+          const e = "invalid number";
+          chai
+           .request(server)
+           .get(`/api/convert/?input=${i}`)
+           .end(function(_, res) {
+             assert.equal(res.status, 200, 'Reponse status should be 200 OK');
+             assert.equal(res.text, e, "should return invalid number");
+             done();
+           });
+        });
+    });
     suite('GET /api/convert?input=1l', function() {
         test("?input=1l", function(done) {
           const f = 3.78541;
@@ -114,7 +128,7 @@ suite('Functional Tests', function() {
     suite('GET /api/convert?input=3/7.2/4kg', function() {
         test("?input=3/7.2/4kg", function(done) {
             const i = "3/7.2/4kg";
-            const e = "invalid data";
+            const e = "invalid number";
             chai
               .request(server)
               .get(`/api/convert/?input=${i}`)

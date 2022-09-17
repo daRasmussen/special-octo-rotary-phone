@@ -24,7 +24,7 @@ function ConvertHandler() {
             if(v[0].split("").length > 5) {
               throw new Error("invalid number and data");
             } else {
-              throw new Error("invalid data");
+              throw new Error("invalid number");
             }
         }
     } else if (!isFloat && !isFrac) {
