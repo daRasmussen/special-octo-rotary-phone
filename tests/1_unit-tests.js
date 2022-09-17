@@ -83,7 +83,7 @@ suite('Unit Tests', function(){
            const unitName = ui.getUnitName();
            for(const unit of Object.keys(unitName)) {
                const r = convertHandler.spellOutUnit(unit);
-               assert.strictEqual(r, unitName[unit]);
+               assert.strictEqual(r, unitName[unit] + "s");
                assert.typeOf(r, "string");
            }
         });
