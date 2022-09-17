@@ -54,8 +54,10 @@ function ConvertHandler() {
                 const notUnit = !units.includes(re);
                 if (numberOfDashes !== 1 && notUnit) {
                     throw new Error("invalid number and unit");
+                    return null;
                 }
                 throw new Error("invalid number");
+                return null;
             }
         }
     } else if (!isFloat && !isFrac) {
