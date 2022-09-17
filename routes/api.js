@@ -11,7 +11,7 @@ module.exports = function (app) {
     try {
       const { query: { input }} = req;
       const i = input || "";
-      console.log("input: ", input);
+      // console.log("input: ", input);
       const initNum = c.getNum(i);
       const initUnit = c.getUnit(i) !== "L" ? c.getUnit(i).toLowerCase(): "L";
       const returnNum = c.convert(initNum, initUnit);
@@ -28,7 +28,7 @@ module.exports = function (app) {
           returnUnit,
           string
       };
-      console.log(ans)
+      // console.log(ans)
       return res.json(ans);
     } catch (e) {
         const { message } = e;
