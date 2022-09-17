@@ -15,7 +15,8 @@ module.exports = function (app) {
       const initUnit = c.getUnit(i) !== "L" ? c.getUnit(i).toLowerCase(): "L";
       const returnNum = c.convert(initNum, initUnit);
       const returnUnit = c.getReturnUnit(i) !== "L" ? c.getReturnUnit(i).toLowerCase() : "L";
-      const string = c.getString(initNum, initUnit, returnNum, returnUnit);
+      const spellOutUnit = c.spellOutUnit(returnUnit);
+      const string = c.getString(initNum, initUnit, returnNum, spellOutUnit);
 
       return res.json({
           initNum,
