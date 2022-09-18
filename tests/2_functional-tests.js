@@ -276,7 +276,7 @@ suite('Functional Tests', function() {
             .end(function(_, res) {
                 assert.equal(res.status, 200, 'Reponse status should be 200 OK');
                 const { error } = JSON.parse(res.text);
-                assert.equal(error, "issue _id not found");
+                assert.equal(error, "could not delete");
                 done();
            });
     });
@@ -290,7 +290,7 @@ suite('Functional Tests', function() {
             .end(function(_, res) {
                 assert.equal(res.status, 200, 'Reponse status should be 200 OK');
                 const { error } = JSON.parse(res.text);
-                assert.equal(error, "missing required field _id");
+                assert.equal(error, "missing _id");
                 done();
            });
     });
