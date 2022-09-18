@@ -210,7 +210,7 @@ suite('Functional Tests', function() {
     test("Update an issue with missing _id:\n\tPUT request to /api/issues/{project}", function(done) {
         const form = {
             issue_title: 'updated',
-            issue_text: 'updated test',
+            issue_text: 'New+Issue+Text',
             created_by: 'Lev',
             assigned_to: 'Jones',
             open: false

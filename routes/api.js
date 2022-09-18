@@ -74,8 +74,8 @@ module.exports = function (app) {
       }
 
       const ans = {
-            assigned_to: req.body.assigned_to,
-            status_text: req.body.status_text,
+            assigned_to: req.body.assigned_to || "",
+            status_text: req.body.status_text || "",
             issue_title: req.body.issue_title,
             issue_text: req.body.issue_text,
             created_by: req.body.created_by,
