@@ -39,7 +39,6 @@ suite('Functional Tests', function() {
             .end(function(_, res) {
                 assert.equal(res.status, 200, 'Reponse status should be 200 OK');
                 const json = JSON.parse(res.text);
-                console.log(json)
                 assert.equal(form.issue_title, json.issue_title);
                 assert.equal(form.issue_text, json.issue_text);
                 assert.equal(form.created_by, json.created_by);
@@ -65,7 +64,6 @@ suite('Functional Tests', function() {
             .end(function(_, res) {
                 assert.equal(res.status, 200, 'Reponse status should be 200 OK');
                 const json = JSON.parse(res.text);
-                console.log(json)
                 assert.equal(form.issue_title, json.issue_title);
                 assert.equal(form.issue_text, json.issue_text);
                 assert.equal(form.created_by, json.created_by);
@@ -91,7 +89,6 @@ suite('Functional Tests', function() {
             .end(function(_, res) {
                 assert.equal(res.status, 200, 'Reponse status should be 200 OK');
                 const json = JSON.parse(res.text);
-                console.log(json)
                 assert.equal(form.issue_title, json.issue_title);
                 assert.equal(form.issue_text, json.issue_text);
                 assert.equal(form.created_by, json.created_by);
