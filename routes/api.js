@@ -43,6 +43,7 @@ module.exports = function (app) {
   app.route('/api/issues/:project')
   
     .get(function (req, res){
+      console.log("GET: ", req.body);
       const project = getProject(req.params.project);
     
       if (!project) {
@@ -60,6 +61,7 @@ module.exports = function (app) {
     })
     
     .post(function (req, res) {
+      console.log("POST: ", req.body);
       const project = getProject(req.params.project);
     
       if (!project) {
@@ -87,6 +89,7 @@ module.exports = function (app) {
     })
     
     .put(function (req, res){
+      console.log("PUT: ", req.body);
       const project = getProject(req.params.project);
     
       if (!project) {
@@ -112,6 +115,7 @@ module.exports = function (app) {
     })
     
     .delete(function (req, res){
+      console.log("DELETE: ", req.body);
       const project = getProject(req.params.project);
     
       if (!project) {
