@@ -22,6 +22,58 @@ suite('Functional Tests', function() {
                 done();
            });
     });
+    test("Create an issue with every field:\n\tPOST request to /api/issues/apitest2/", function(done) {
+        const form = {
+            issue_title: 'test',
+            issue_text: 'test',
+            created_by: 'test',
+            assigned_to: 'test',
+            status_text: 'test',
+            _id,
+        };
+        chai
+            .request(server)
+            .post('/api/issues/apitest2/')
+            .set('content-type', 'application/x-www-form-urlencoded')
+            .send(form)
+            .end(function(_, res) {
+                assert.equal(res.status, 200, 'Reponse status should be 200 OK');
+                const json = JSON.parse(res.text);
+                console.log(json)
+                assert.equal(form.issue_title, json.issue_title);
+                assert.equal(form.issue_text, json.issue_text);
+                assert.equal(form.created_by, json.created_by);
+                assert.equal(form.assigned_to, json.assigned_to);
+                assert.equal(form.status_text, json.status_text);
+                done();
+           });
+    });
+    test("Create an issue with every field:\n\tPOST request to /api/issues/apitest/", function(done) {
+        const form = {
+            issue_title: 'test',
+            issue_text: 'test',
+            created_by: 'test',
+            assigned_to: 'test',
+            status_text: 'test',
+            _id,
+        };
+        chai
+            .request(server)
+            .post('/api/issues/apitest/')
+            .set('content-type', 'application/x-www-form-urlencoded')
+            .send(form)
+            .end(function(_, res) {
+                assert.equal(res.status, 200, 'Reponse status should be 200 OK');
+                const json = JSON.parse(res.text);
+                console.log(json)
+                assert.equal(form.issue_title, json.issue_title);
+                assert.equal(form.issue_text, json.issue_text);
+                assert.equal(form.created_by, json.created_by);
+                assert.equal(form.assigned_to, json.assigned_to);
+                assert.equal(form.status_text, json.status_text);
+                done();
+           });
+    });
     test("Create an issue with every field:\n\tPOST request to /api/issues/apitest/", function(done) {
         const form = {
             issue_title: 'test',
@@ -87,7 +139,7 @@ suite('Functional Tests', function() {
             .end(function(_, res) {
                 assert.equal(res.status, 200, 'Reponse status should be 200 OK');
                 const issues = JSON.parse(res.text);
-                assert.equal(issues.length, 2);
+                assert.equal(issues.length, 3);
                 done();
            });
     });

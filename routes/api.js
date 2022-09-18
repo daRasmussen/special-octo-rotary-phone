@@ -13,18 +13,18 @@ const projects = [
 const getIssues = (name) => projects.find(p => p.name === name).issues;
 
 const getProject = (name) => {
-   const project = projects.find(p => p.name === name);
-    if( project.length === 0 ) {
-        const newProject = {
-            projectId: uuidv4(),
-            name,
-            issues: []
-        };
-        projects.push(newProject);
-        return newProject;
-    } else {
-        return project;
-    }
+   const project = projects.find(p => p.name === name) || [];
+   if( project.length === 0 ) {
+       const newProject = {
+           projectId: uuidv4(),
+           name,
+           issues: []
+       };
+       projects.push(newProject);
+       return newProject;
+   } else {
+       return project;
+   }
 }
 const validBody = (body) => {
     try {
@@ -55,9 +55,7 @@ module.exports = function (app) {
   app.route('/api/issues/:project')
   
     .get(function (req, res){
-      console.log("GET: ", req.body);
       const project = getProject(req.params.project);
-    
       const issues = getIssues(project.name);
       if ( Object.keys(req.query).length === 0 ) {
           return res.json(issues);
@@ -69,7 +67,6 @@ module.exports = function (app) {
     })
     
     .post(function (req, res) {
-      console.log("POST: ", req.body);
       const project = getProject(req.params.project);
     
       if (!validBody(req.body)) {
@@ -93,7 +90,6 @@ module.exports = function (app) {
     })
     
     .put(function (req, res){
-      console.log("PUT: ", req.body);
       const project = getProject(req.params.project);
     
       if (!req.body._id) {
@@ -115,7 +111,6 @@ module.exports = function (app) {
     })
     
     .delete(function (req, res){
-      console.log("DELETE: ", req.body);
       const project = getProject(req.params.project);
     
       if (!req.body._id) {
