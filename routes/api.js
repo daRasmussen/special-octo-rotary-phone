@@ -107,11 +107,10 @@ module.exports = function (app) {
       }
       issue = issue[0];
       const keys = Object.keys(req.body);
-      // console.log("ISSUE BEFORE: ", issue);
       for (const key of keys) {
           issue[key] = req.body[key];
       }
-      // console.log("AFTER: ", issue);
+      issue["updated_on"] = new Date(Date.now());
       const { _id } = issue;
       const r = { result: "successfully updated", _id  };
       return res.json(r);
