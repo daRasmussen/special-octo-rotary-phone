@@ -1,5 +1,7 @@
 'use strict';
 
+const issues = [];
+
 module.exports = function (app) {
 
   app.route('/api/issues/:project')
@@ -15,16 +17,24 @@ module.exports = function (app) {
           params: { project }, 
           body 
       } = req;
+      if (!body.issue_title || !body.issue_text || !body.created_by) {
+          return res.json({ error: 'required field(s) missing' })
+      }
       const ans = {
-            ...body,
+            assigned_to: body.assigned_to,
+            status_text: body.status_text,
+            issue_title: body.issue_title,
+            issue_text: body.issue_text,
+            created_by: body.created_by,
+            open: true,
             _id: "63263733943c9b0973351b2f",
             created_on: new Date(Date.now()),
             updated_on: new Date(Date.now())
       };
-      // console.log(ans);
-      // res.json(ans)
-      console.log("POST req.body: ", req.body)
-      return res.send("ok");
+      issues.push(ans);
+      // console.log(ans)
+      // console.log("POST req.body: ", req.body)
+      return res.json(ans);
     })
     
     .put(function (req, res){
@@ -36,7 +46,7 @@ module.exports = function (app) {
     .delete(function (req, res){
       let project = req.params.project;
       
-      console.log("DELETE req.body: ", req.body)
+      console.log("delete req.body: ", req.body)
       return res.send("ok");
     });
     
