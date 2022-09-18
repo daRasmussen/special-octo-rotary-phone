@@ -9,26 +9,13 @@ chai.use(chaiHttp);
 const _id = uuidv4();
 
 suite('Functional Tests', function() {
-    test("POST request to /api/issues/projectX/ with no body.", function(done) {
-        chai
-            .request(server)
-            .post('/api/issues/projectX/')
-            .set('content-type', 'application/x-www-form-urlencoded')
-            .send({})
-            .end(function( req, res) {
-                assert.equal(res.status, 200, 'Reponse status should be 200 OK');
-                const json = JSON.parse(res.text);
-                assert.equal(json.error, 'project not found!')
-                done();
-           });
-    });
     test("POST request to /api/issues/apitest/ with no body.", function(done) {
         chai
             .request(server)
             .post('/api/issues/apitest/')
             .set('content-type', 'application/x-www-form-urlencoded')
             .send({})
-            .end(function( req, res) {
+            .end(function( _, res) {
                 assert.equal(res.status, 200, 'Reponse status should be 200 OK');
                 const json = JSON.parse(res.text);
                 assert.equal(json.error, 'required field(s) missing');
@@ -52,6 +39,7 @@ suite('Functional Tests', function() {
             .end(function(_, res) {
                 assert.equal(res.status, 200, 'Reponse status should be 200 OK');
                 const json = JSON.parse(res.text);
+                console.log(json)
                 assert.equal(form.issue_title, json.issue_title);
                 assert.equal(form.issue_text, json.issue_text);
                 assert.equal(form.created_by, json.created_by);

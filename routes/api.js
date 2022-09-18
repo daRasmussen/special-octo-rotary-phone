@@ -12,8 +12,20 @@ const projects = [
 
 const getIssues = (name) => projects.find(p => p.name === name).issues;
 
-const getProject = (name) => projects.find(p => p.name === name); 
-
+const getProject = (name) => {
+   const project = projects.find(p => p.name === name);
+    if( project.length === 0 ) {
+        const newProject = {
+            projectId: uuidv4(),
+            name,
+            issues: []
+        };
+        projects.push(newProject);
+        return newProject;
+    } else {
+        return project;
+    }
+}
 const validBody = (body) => {
     try {
         return body.issue_title && body.issue_text && body.created_by; 
@@ -46,10 +58,6 @@ module.exports = function (app) {
       console.log("GET: ", req.body);
       const project = getProject(req.params.project);
     
-      if (!project) {
-          return res.json({ error: 'project not found!' });
-      }
-
       const issues = getIssues(project.name);
       if ( Object.keys(req.query).length === 0 ) {
           return res.json(issues);
@@ -64,10 +72,6 @@ module.exports = function (app) {
       console.log("POST: ", req.body);
       const project = getProject(req.params.project);
     
-      if (!project) {
-          return res.json({ error: 'project not found!' });
-      }
-
       if (!validBody(req.body)) {
           return res.json({ error: 'required field(s) missing' })      
       }
@@ -92,10 +96,6 @@ module.exports = function (app) {
       console.log("PUT: ", req.body);
       const project = getProject(req.params.project);
     
-      if (!project) {
-          return res.json({ error: 'project not found!' });
-      }
-
       if (!req.body._id) {
           return res.json({ error: 'missing required field _id' });
       }
@@ -118,10 +118,6 @@ module.exports = function (app) {
       console.log("DELETE: ", req.body);
       const project = getProject(req.params.project);
     
-      if (!project) {
-          return res.json({ error: 'project not found!' });
-      }
-
       if (!req.body._id) {
           return res.json({ error: 'missing required field _id' });
       }
@@ -136,7 +132,5 @@ module.exports = function (app) {
 
       const r = { result: "successfully deleted", _id };
       return res.json(r);
-
     });
-    
 };
