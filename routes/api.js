@@ -112,10 +112,27 @@ module.exports = function (app) {
     })
     
     .delete(function (req, res){
-      let project = req.params.project;
+      const project = getProject(req.params.project);
+    
+      if (!project) {
+          return res.json({ error: 'project not found!' });
+      }
+
+      if (!req.body._id) {
+          return res.json({ error: 'missing required field _id' });
+      }
       
-      console.log("delete req.body: ", req.body)
-      return res.send("ok");
+      const issues = getIssues(project.name);
+      const issue = issues.filter(issue => issue._id === req.body._id);
+      if(issue.length === 0) {
+          return res.json({ error: 'issue _id not found' })
+      }
+      const { _id } = issue[0];
+      issues.pop(issue);
+
+      const r = { result: "successfully deleted", _id };
+      return res.json(r);
+
     });
     
 };

@@ -211,4 +211,50 @@ suite('Functional Tests', function() {
                 done();
            });
     });
+    test("Delete an issue:\n\tDELETE request to /api/issues/{project}", function(done) {
+        const form = {
+            _id,
+        };
+        chai
+            .request(server)
+            .delete('/api/issues/apitest/')
+            .set('content-type', 'application/x-www-form-urlencoded')
+            .send(form)
+            .end(function(_, res) {
+                assert.equal(res.status, 200, 'Reponse status should be 200 OK');
+                const json = JSON.parse(res.text);
+                assert.equal(_id, json._id);
+                done();
+           });
+    });
+    test("Delete an issue with an invalid _id:\n\tDELETE request to /api/issues/{project}", function(done) {
+        const form = {
+            _id: "123-123",
+        };
+        chai
+            .request(server)
+            .delete('/api/issues/apitest/')
+            .set('content-type', 'application/x-www-form-urlencoded')
+            .send(form)
+            .end(function(_, res) {
+                assert.equal(res.status, 200, 'Reponse status should be 200 OK');
+                const { error } = JSON.parse(res.text);
+                assert.equal(error, "issue _id not found");
+                done();
+           });
+    });
+    test("Delete an issue with missing _id:\n\tDELETE request to /api/issues/{project}", function(done) {
+        const form = {};
+        chai
+            .request(server)
+            .delete('/api/issues/apitest/')
+            .set('content-type', 'application/x-www-form-urlencoded')
+            .send(form)
+            .end(function(_, res) {
+                assert.equal(res.status, 200, 'Reponse status should be 200 OK');
+                const { error } = JSON.parse(res.text);
+                assert.equal(error, "missing required field _id");
+                done();
+           });
+    });
 });
