@@ -191,6 +191,22 @@ suite('Functional Tests', function() {
                 done();
            });
     });
+    test("Update an issue with missing fields:\n\tPUT request to /api/issues/{project}", function(done) {
+        const form = {
+            _id
+        };
+        chai
+            .request(server)
+            .put('/api/issues/apitest/')
+            .set('content-type', 'application/x-www-form-urlencoded')
+            .send(form)
+            .end(function(_, res) {
+                assert.equal(res.status, 200, 'Reponse status should be 200 OK');
+                const { error } = JSON.parse(res.text);
+                assert.equal(error, 'no update field(s) sent');
+                done();
+           });
+    });
     test("Update an issue with missing _id:\n\tPUT request to /api/issues/{project}", function(done) {
         const form = {
             issue_title: 'updated',
@@ -207,7 +223,7 @@ suite('Functional Tests', function() {
             .end(function(_, res) {
                 assert.equal(res.status, 200, 'Reponse status should be 200 OK');
                 const { error } = JSON.parse(res.text);
-                assert.equal(error, 'missing required field _id');
+                assert.equal(error, 'missing _id');
                 done();
            });
     });
@@ -228,7 +244,7 @@ suite('Functional Tests', function() {
             .end(function(_, res) {
                 assert.equal(res.status, 200, 'Reponse status should be 200 OK');
                 const { error } = JSON.parse(res.text);
-                assert.equal(error, 'issue _id not found');
+                assert.equal(error, 'could not update');
                 done();
            });
     });

@@ -91,15 +91,18 @@ module.exports = function (app) {
     
     .put(function (req, res){
       const project = getProject(req.params.project);
-    
       if (!req.body._id) {
-          return res.json({ error: 'missing required field _id' });
+        return res.json({ error: 'missing _id' });
+      }
+      
+      if (Object.keys(req.body).length === 1) {
+        return res.json({ error: 'no update field(s) sent', '_id': req.body._id  })
       }
       
       const issues = getIssues(project.name);
       const issue = issues.filter(issue => issue._id === req.body._id);
       if(issue.length === 0) {
-          return res.json({ error: 'issue _id not found' })
+          return res.json({ error: 'could not update', '_id': req.body._id })
       }
       const keys = Object.keys(req.body);
       for (const key of keys) {
