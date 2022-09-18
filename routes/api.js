@@ -100,14 +100,18 @@ module.exports = function (app) {
       }
       
       const issues = getIssues(project.name);
-      const issue = issues.filter(issue => issue._id === req.body._id);
+      let issue = issues.filter(issue => issue._id === req.body._id);
+    
       if(issue.length === 0) {
           return res.json({ error: 'could not update', '_id': req.body._id })
       }
+      issue = issue[0];
       const keys = Object.keys(req.body);
+      // console.log("ISSUE BEFORE: ", issue);
       for (const key of keys) {
           issue[key] = req.body[key];
       }
+      // console.log("AFTER: ", issue);
       const { _id } = issue;
       const r = { result: "successfully updated", _id  };
       return res.json(r);
