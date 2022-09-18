@@ -6,25 +6,107 @@ const server = require('../server');
 chai.use(chaiHttp);
 
 suite('Functional Tests', function() {
-    test("Create an issue with every field: POST request to /api/issues/apitest/", function(done) {
+    test("POST request to /api/issues/projectX/ with no body.", function(done) {
+        chai
+            .request(server)
+            .post('/api/issues/projectX/')
+            .set('content-type', 'application/x-www-form-urlencoded')
+            .send({})
+            .end(function( req, res) {
+                assert.equal(res.status, 200, 'Reponse status should be 200 OK');
+                const json = JSON.parse(res.text);
+                assert.equal(json.error, 'project not found!')
+                done();
+           });
+    });
+    test("POST request to /api/issues/apitest/ with no body.", function(done) {
+        chai
+            .request(server)
+            .post('/api/issues/apitest/')
+            .set('content-type', 'application/x-www-form-urlencoded')
+            .send({})
+            .end(function( req, res) {
+                assert.equal(res.status, 200, 'Reponse status should be 200 OK');
+                const json = JSON.parse(res.text);
+                assert.equal(json.error, 'required field(s) missing');
+                done();
+           });
+    });
+    test("Create an issue with every field:\n\tPOST request to /api/issues/apitest/", function(done) {
         const form = {
             issue_title: 'test',
             issue_text: 'test',
             created_by: 'test',
-            assigned_to: '',
-            status_text: '',
+            assigned_to: 'test',
+            status_text: 'test',
         };
         chai
             .request(server)
             .post('/api/issues/apitest/')
             .set('content-type', 'application/x-www-form-urlencoded')
             .send(form)
-            .end(function( req, res) {
+            .end(function(_, res) {
                 assert.equal(res.status, 200, 'Reponse status should be 200 OK');
                 const json = JSON.parse(res.text);
                 assert.equal(form.issue_title, json.issue_title);
                 assert.equal(form.issue_text, json.issue_text);
                 assert.equal(form.created_by, json.created_by);
+                assert.equal(form.assigned_to, json.assigned_to);
+                assert.equal(form.status_text, json.status_text);
+                done();
+           });
+    });
+    test("Create an issue with required fields:\n\t POST request to /api/issues/apitest/", function(done) {
+        const form = {
+            issue_title: 'test',
+            issue_text: 'test',
+            created_by: 'drGeo',
+            assigned_to: 'Joe'
+        };
+        chai
+            .request(server)
+            .post('/api/issues/apitest/')
+            .set('content-type', 'application/x-www-form-urlencoded')
+            .send(form)
+            .end(function(_, res) {
+                assert.equal(res.status, 200, 'Reponse status should be 200 OK');
+                const json = JSON.parse(res.text);
+                assert.equal(form.issue_title, json.issue_title);
+                assert.equal(form.issue_text, json.issue_text);
+                assert.equal(form.created_by, json.created_by);
+                done();
+           });
+    });
+    test("View issues on a project: GET request to /api/issues/{project}", function(done) {
+        chai
+            .request(server)
+            .get('/api/issues/apitest/')
+            .end(function(_, res) {
+                assert.equal(res.status, 200, 'Reponse status should be 200 OK');
+                const issues = JSON.parse(res.text);
+                assert.notEqual(issues.length, 0, "Should not be empty");
+                done();
+           });
+    });
+    test("View issues on a project with one filter: \n\tGET request to /api/issues/{project}?open=true", function(done) {
+        chai
+            .request(server)
+            .get('/api/issues/apitest/?open=true')
+            .end(function(_, res) {
+                assert.equal(res.status, 200, 'Reponse status should be 200 OK');
+                const issues = JSON.parse(res.text);
+                assert.equal(issues.length, 2);
+                done();
+           });
+    });
+    test("View issues on a project with multiple filters: \n\tGET request to /api/issues/{project}?opentrue&assigned_to=Joe", function(done) {
+        chai
+            .request(server)
+            .get('/api/issues/apitest/?open=true&assigned_to=Joe')
+            .end(function(_, res) {
+                assert.equal(res.status, 200, 'Reponse status should be 200 OK');
+                const issues = JSON.parse(res.text);
+                assert.equal(issues.length, 1)
                 done();
            });
     });
