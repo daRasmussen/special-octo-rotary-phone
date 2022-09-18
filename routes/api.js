@@ -77,21 +77,38 @@ module.exports = function (app) {
             issue_text: req.body.issue_text,
             created_by: req.body.created_by,
             open: true,
-            _id: uuidv4(),
+            _id: req.body._id || uuidv4(),
             created_on: new Date(Date.now()),
             updated_on: new Date(Date.now())
       };
       const issues = getIssues(project.name);
       issues.push(ans);
-      // console.log(ans)
-      // console.log("POST req.body: ", req.body)
       return res.json(ans);
     })
     
     .put(function (req, res){
-      let project = req.params.project;
-      console.log("PUT req.body: ", req.body)
-      return res.send("ok");
+      const project = getProject(req.params.project);
+    
+      if (!project) {
+          return res.json({ error: 'project not found!' });
+      }
+
+      if (!req.body._id) {
+          return res.json({ error: 'missing required field _id' });
+      }
+      
+      const issues = getIssues(project.name);
+      const issue = issues.filter(issue => issue._id === req.body._id);
+      if(issue.length === 0) {
+          return res.json({ error: 'issue _id not found' })
+      }
+      const keys = Object.keys(req.body);
+      for (const key of keys) {
+          issue[key] = req.body[key];
+      }
+      const { _id } = issue;
+      const r = { result: "successfully updated", _id  };
+      return res.json(r);
     })
     
     .delete(function (req, res){

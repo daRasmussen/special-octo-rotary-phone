@@ -2,8 +2,11 @@ const chaiHttp = require('chai-http');
 const chai = require('chai');
 const assert = chai.assert;
 const server = require('../server');
+const { v4: uuidv4 } = require('uuid');
 
 chai.use(chaiHttp);
+
+const _id = uuidv4();
 
 suite('Functional Tests', function() {
     test("POST request to /api/issues/projectX/ with no body.", function(done) {
@@ -39,6 +42,7 @@ suite('Functional Tests', function() {
             created_by: 'test',
             assigned_to: 'test',
             status_text: 'test',
+            _id,
         };
         chai
             .request(server)
@@ -107,6 +111,103 @@ suite('Functional Tests', function() {
                 assert.equal(res.status, 200, 'Reponse status should be 200 OK');
                 const issues = JSON.parse(res.text);
                 assert.equal(issues.length, 1)
+                done();
+           });
+    });
+    test("Update one field on an issue:\n\tPUT request to /api/issues/{project}", function(done) {
+        const form = {
+            _id,
+            issue_title: 'updated',
+        };
+        chai
+            .request(server)
+            .put('/api/issues/apitest/')
+            .set('content-type', 'application/x-www-form-urlencoded')
+            .send(form)
+            .end(function(_, res) {
+                assert.equal(res.status, 200, 'Reponse status should be 200 OK');
+                const json = JSON.parse(res.text);
+                const resID = json._id;
+                assert.equal(_id, resID );
+                done();
+           });
+    });
+    test("Update multiple fields on an issue:\n\tPUT request to /api/issues/{project}", function(done) {
+        const form = {
+            _id,
+            issue_title: 'updated',
+            issue_text: 'updated test',
+            created_by: 'Lev',
+            assigned_to: 'Jones',
+            open: false
+        };
+        chai
+            .request(server)
+            .put('/api/issues/apitest/')
+            .set('content-type', 'application/x-www-form-urlencoded')
+            .send(form)
+            .end(function(_, res) {
+                assert.equal(res.status, 200, 'Reponse status should be 200 OK');
+                const json = JSON.parse(res.text);
+                const resID = json._id;
+                assert.equal(_id, resID );
+                done();
+           });
+    });
+    test("Update an issue with missing _id:\n\tPUT request to /api/issues/{project}", function(done) {
+        const form = {
+            issue_title: 'updated',
+            issue_text: 'updated test',
+            created_by: 'Lev',
+            assigned_to: 'Jones',
+            open: false
+        };
+        chai
+            .request(server)
+            .put('/api/issues/apitest/')
+            .set('content-type', 'application/x-www-form-urlencoded')
+            .send(form)
+            .end(function(_, res) {
+                assert.equal(res.status, 200, 'Reponse status should be 200 OK');
+                const { error } = JSON.parse(res.text);
+                assert.equal(error, 'missing required field _id');
+                done();
+           });
+    });
+    test("Update an issue with missing _id:\n\tPUT request to /api/issues/{project}", function(done) {
+        const form = {
+            _id: "123-123-123",
+            issue_title: 'updated',
+            issue_text: 'updated test',
+            created_by: 'Lev',
+            assigned_to: 'Jones',
+            open: false
+        };
+        chai
+            .request(server)
+            .put('/api/issues/apitest/')
+            .set('content-type', 'application/x-www-form-urlencoded')
+            .send(form)
+            .end(function(_, res) {
+                assert.equal(res.status, 200, 'Reponse status should be 200 OK');
+                const { error } = JSON.parse(res.text);
+                assert.equal(error, 'issue _id not found');
+                done();
+           });
+    });
+    test("Update an issue with no fields to update:\n\tPUT request to /api/issues/{project}", function(done) {
+        const form = {
+            _id,
+        };
+        chai
+            .request(server)
+            .put('/api/issues/apitest/')
+            .set('content-type', 'application/x-www-form-urlencoded')
+            .send(form)
+            .end(function(_, res) {
+                assert.equal(res.status, 200, 'Reponse status should be 200 OK');
+                const json = JSON.parse(res.text);
+                assert.equal(_id, json._id);
                 done();
            });
     });
