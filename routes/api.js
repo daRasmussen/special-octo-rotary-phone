@@ -39,6 +39,9 @@ module.exports = function (app) {
     .post(async function (req, res){
       let title = req.body.title;
       //response will contain new book object including at least _id and title
+      if (!req.body.hasOwnProperty('title')) {
+        return res.status(200).send("missing required field title");
+      }
       await client.connect();
       const c = getCollection();
       const inserted = await c.insertOne({ title });

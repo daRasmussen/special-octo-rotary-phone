@@ -21,7 +21,7 @@ suite('Functional Tests', function() {
   * including response status code!
   */ 
   test('#example Test GET /api/books', async function(){
-     const res = await chai.request(server).get("/api/books");
+     const res = await chai.request(server).get("/api/books").send();
      assert.equal(res.status, 200, "response should be 200");
      assert.isArray(res.body, 'response should be an array');
      const [ first ] = res.body;
@@ -39,13 +39,30 @@ suite('Functional Tests', function() {
     suite('POST /api/books with title => create book object/expect book object', function() {
       
       test('Test POST /api/books with title', async function() {
-        const res = await chai.request(server).post("/api/books");
-        
+        const res = await chai
+              .request(server)
+              .post("/api/books")
+              .set("Content-Type", "application/json")
+              .send({ title: "abc" });
+        assert.equal(res.status, 200, "response should be 200");
+        assert.isObject(res.body, "response should be an object");
+        assert.property(res.body, '_id', "Book should have an _id");
+        assert.property(res.body, "title", "Book should have a title");
       });
       
       test('Test POST /api/books with no title given', async function() {
-        const res = await chai.request(server).post("/api/books");
-
+        const res = await chai
+              .request(server)
+              .post("/api/books")
+              .set("content-type", "application/json")
+              .send({});
+         assert.equal(res.status, 200, "response should be 200");
+         assert.isString(res.text, "response should be a string");
+         assert.equal(
+          res.text, 
+          "missing required field title", 
+          "response should be a message"
+         );
       });
       
     });
