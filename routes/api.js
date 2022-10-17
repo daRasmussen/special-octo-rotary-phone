@@ -63,13 +63,16 @@ module.exports = function (app) {
       const _id = req.params.id;
       // json res format: 
       // {"_id": bookid, "title": book_title, "comments": [comment,comment,...]}
+      if (_id.length < 20 ) {
+        res.status(200).send("no book exists");
+      }
       await client.connect();
       const c = getCollection();
       const found = await c.findOne({ "_id": ObjectId(_id) });
       if(found) {
         res.status(200).json(found);
       } else {
-        res.status(200).send("no book exists.");
+        res.status(200).send("no book exists");
       }
     })
     

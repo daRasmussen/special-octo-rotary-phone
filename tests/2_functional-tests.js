@@ -66,7 +66,7 @@ suite('Functional Tests', function() {
   * Each test should completely test the response of the API end-point 
   * including response status code!
   */ 
-  test('#example Test GET /api/books', async function(){
+  test('#example Test GET /api/books', async function() {
      const res = await chai.request(server).get("/api/books").send();
      assert.equal(res.status, 200, "response should be 200");
      assert.isArray(res.body, 'response should be an array');
@@ -155,7 +155,7 @@ suite('Functional Tests', function() {
         assert.equal(res.status, 200, "response should be 200");
         assert.equal(
           res.text, 
-          "no book exists.", 
+          "no book exists", 
           "response text should prompt that no book exists"
         );
       });
