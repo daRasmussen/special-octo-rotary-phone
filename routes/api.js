@@ -77,14 +77,34 @@ module.exports = function (app) {
     })
     
     .post(async function(req, res){
-      let bookid = req.params.id;
-      let comment = req.body.comment;
-      //json res format same as .get
+      const _id = req.params.id;
+      const comment = req.body.comment;
+      const qid = { "_id": ObjectId(_id) };
       await client.connect();
       const c = getCollection();
-      const updated = c.updateOne({ _id: bookid, comment })
-      console.log(updated);
-      return res.status(200).json(updated);
+      const found = await c.findOne(qid);
+      if (found) { 
+          if (comment) {
+              await c.updateOne(
+                  qid, 
+                  { 
+                    $push: { comments: comment  },
+                  }
+              );
+              const { comments: { length: commentcount } } = 
+                    await c.findOne(qid);
+              await c.updateOne(
+                qid,
+                {
+                  $set: { commentcount }
+                }
+              );
+              const updated = await c.findOne(qid);
+              res.status(200).json(updated);
+          } 
+      } else {
+        res.status(200).send("no book exists")
+      }
     })
     
     .delete(function(req, res){

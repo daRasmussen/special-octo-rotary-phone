@@ -5,7 +5,7 @@ colors.pass = 32;
 
 module.exports = {
   // "async-only": true,
-  // timeout: 10000,
+  timeout: 60000,
   ui: "tdd",
   watch: true,
   'watch-files': ['tests/*.js', 'routes/api.js'],

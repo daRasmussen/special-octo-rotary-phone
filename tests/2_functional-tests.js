@@ -169,17 +169,33 @@ suite('Functional Tests', function() {
         assert.equal(id, res.body["_id"]);
       });
     });
-    //suite('POST /api/books/[id] => add comment/expect book object with id', function(){
-    //  test('Test POST /api/books/[id] with comment', function(done){
-    //    //done();
-    //  });
-    //  test('Test POST /api/books/[id] without comment field', function(done){
-    //    //done();
-    //  });
-    //  test('Test POST /api/books/[id] with comment, id not in db', function(done){
-    //    //done();
-    //  });
-    //});
+    suite('POST /api/books/[id] => add comment/expect book object with id', 
+          function() {
+      test('Test POST /api/books/[id] with comment', async function() {
+        const id = books[0]["_id"];
+        const res = await chai
+          .request(server)
+          .post(`/api/books/${id}`)
+          .set("content-type", "application/json")
+          .send({ bookid: id, comment: "hej123" });
+        assert.equal(res.status, 200, "response should be 200");
+        assert.isTrue(
+          res.body.hasOwnProperty("comments"), 
+          "response has comments property.");
+        assert.equal(
+          res.body.commentcount, 
+          1, 
+          "commentscount is lenght 1"
+        );
+      });
+      // test('Test POST /api/books/[id] without comment field', 
+      //       async function() {
+      // });
+      // test('Test POST /api/books/[id] with comment, id not in db', 
+      //       async function(){
+      // });
+    });
+    
     //suite('DELETE /api/books/[id] => delete book object id', function() {
     //  test('Test DELETE /api/books/[id] with valid id in db', function(done){
     //    //done();
