@@ -111,6 +111,7 @@ suite('Functional Tests', function() {
     });
 
     suite('GET /api/books => array of books', function() {
+      this.timeout(100);
       test('Test GET /api/books',  async function() {
         const res = await chai
               .request(server)
