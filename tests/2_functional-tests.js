@@ -39,7 +39,6 @@ const flush = async () => await chai
 suite('Functional Tests', function() {
   setup(async function() {
       this.timeout(60000);
-      await flush();
       for(const book of books) {
           await addBook(book);
       };
@@ -47,12 +46,6 @@ suite('Functional Tests', function() {
           .request(server)
           .get("/api/books")
           .send();
-      // console.log("books mongo remote: ",storedBooks.body);
-      assert.equal(
-        storedBooks.body.length, 
-        books.length, 
-        "should have same length"
-      );
       books.map((b) => {
           b["_id"] = storedBooks
               .body
@@ -60,11 +53,10 @@ suite('Functional Tests', function() {
                 (sb) => sb["title"] === b["title"]
               )[0]["_id"];
       });
-      // console.log("books local: ", books);
   });
   teardown(async function() {
-    const res = await flush();
-    // console.log(res.text);
+    this.timeout(60000);
+    await flush();
   });
  /*
   * ----[EXAMPLE TEST]----
@@ -87,6 +79,7 @@ suite('Functional Tests', function() {
   * ----[END of EXAMPLE TEST]----
   */
   suite('Routing tests', function() {
+
     suite(
       'POST /api/books with title => create book object/expect book object', 
       function() {
@@ -116,6 +109,7 @@ suite('Functional Tests', function() {
            );
         });
     });
+
     suite('GET /api/books => array of books', function() {
       test('Test GET /api/books',  async function() {
         const res = await chai
@@ -148,10 +142,9 @@ suite('Functional Tests', function() {
         }
       });      
     });
+
     suite('GET /api/books/[id] => book object with [id]', function() {
       test('Test GET /api/books/[id] with id not in db',  async function() {
-        const test = await chai.request(server).get("/api/books").send();
-        console.log(test.body)
         const id = 3;
         const res = await chai
           .request(server)
@@ -190,6 +183,7 @@ suite('Functional Tests', function() {
         );
       });
     });
+
     suite('POST /api/books/[id] => add comment/expect book object with id', 
           async function() {
       test('Test POST /api/books/[id] with comment', async function() {
@@ -242,7 +236,7 @@ suite('Functional Tests', function() {
           );
       });
     });
-    
+
     suite(
     'DELETE /api/books/[id] => delete book object id', function() {
       test(

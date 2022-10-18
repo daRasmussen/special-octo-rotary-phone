@@ -46,7 +46,7 @@ module.exports = function (app) {
       const c = getCollection();
       const inserted = await c.insertOne({ title, commentcount });
       const { insertedId: _id } = inserted;
-      return res.status(200).json({ _id, title });
+      res.status(200).json({ _id, title });
     })
     .delete(async function(_, res){
       // if successful response will be 'complete delete successful'
