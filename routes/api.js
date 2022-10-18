@@ -54,9 +54,9 @@ module.exports = function (app) {
       const c = getCollection();
       try {
         c.deleteMany({});
-        res.status(200).send("complete delete successful");
+        return res.status(200).send("complete delete successful");
       } catch (e) {
-        res.status(500);
+        return res.status(500);
       }
     });
   app.route('/api/books/:id')
@@ -78,7 +78,7 @@ module.exports = function (app) {
             "comments": found["comments"] ||  []
         });
       } else {
-        res.status(200).send("no book exists");
+        return res.status(200).send("no book exists");
       }
     })
     
@@ -106,12 +106,12 @@ module.exports = function (app) {
                 }
               );
               const updated = await c.findOne(qid);
-              res.status(200).json(updated);
+              return res.status(200).json(updated);
           } else {
-              res.status(200).send("missing required field comment");
+              return res.status(200).send("missing required field comment");
           } 
       } else {
-        res.status(200).send("no book exists")
+        return res.status(200).send("no book exists")
       }
     })
     
@@ -122,11 +122,11 @@ module.exports = function (app) {
       const c = getCollection();
       const { deletedCount } = await c.deleteOne(qid);
       if (deletedCount === 1) {
-        res.status(200).send("delete successful");
+        return res.status(200).send("delete successful");
       } else if (deletedCount > 1) {
-        res.status(200).send("complete delete successful");
+        return res.status(200).send("complete delete successful");
       } else if (deletedCount === 0) {
-        res.status(200).send("no book exists");
+        return res.status(200).send("no book exists");
       }
     });
   

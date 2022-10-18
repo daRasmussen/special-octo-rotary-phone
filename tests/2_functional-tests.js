@@ -38,6 +38,8 @@ const flush = async () => await chai
 
 suite('Functional Tests', function() {
   setup(async function() {
+      this.timeout(60000);
+      await flush();
       for(const book of books) {
           await addBook(book);
       };
@@ -147,12 +149,13 @@ suite('Functional Tests', function() {
       });      
     });
     suite('GET /api/books/[id] => book object with [id]', function() {
-      const url = (id) => `/api/books/${id}`;
       test('Test GET /api/books/[id] with id not in db',  async function() {
+        const test = await chai.request(server).get("/api/books").send();
+        console.log(test.body)
         const id = 3;
         const res = await chai
           .request(server)
-          .get(url(id))
+          .get(`/api/books/${id}`)
           .send();
         assert.equal(res.status, 200, "response should be 200");
         assert.equal(
@@ -165,7 +168,7 @@ suite('Functional Tests', function() {
         const id = books[0]["_id"];
         const res = await chai
           .request(server)
-          .get(url(id))
+          .get(`/api/books/${id}`)
           .send();
         assert.equal(res.status, 200, "response should be 200");
         assert.equal(
