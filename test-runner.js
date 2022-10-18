@@ -24,7 +24,6 @@
 *
 *
 */
-
 const analyser = require('./assertion-analyser');
 const EventEmitter = require('events').EventEmitter;
 
@@ -32,9 +31,12 @@ const Mocha = require('mocha'),
     fs = require('fs'),
     path = require('path');
 
-const mocha = new Mocha();
+const mocha = new Mocha({
+    timeout: 60000,
+    retries: 2,
+    ui: "tdd"
+});
 const testDir = './tests'
-
 
 // Add each .js file to the mocha instance
 fs.readdirSync(testDir).filter(function(file){

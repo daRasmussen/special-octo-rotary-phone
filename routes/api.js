@@ -36,7 +36,7 @@ module.exports = function (app) {
     })
     .post(async function (req, res){
       const title = req.body?.title || undefined;
-      const commentcount = req.body?.commentcount || null;
+      const commentcount = req.body?.commentcount || 0;
       // response will contain new book object including at least _id and title
       if (!req.body.hasOwnProperty('title')) {
         return res.status(200).send("missing required field title");

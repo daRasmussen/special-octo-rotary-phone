@@ -17,12 +17,12 @@ const books = [
     {
         bookid: 1,
         title: "book1",
-        commentcount: 1,
+        commentcount: 0,
     },
     {
         bookid: 2,
         title: "book2",
-        commentcount: 2,
+        commentcount: 0,
     }
 ];
 
@@ -111,7 +111,7 @@ suite('Functional Tests', function() {
            );
         });
     });
-    suite('GET /api/books => array of books', function() {
+    suite.only('GET /api/books => array of books', function() {
       test('Test GET /api/books',  async function() {
         const res = await chai
               .request(server)
@@ -187,8 +187,8 @@ suite('Functional Tests', function() {
         );
         assert.equal(
           res.body.commentcount, 
-          1, 
-          "commentscount is lenght 2, new comment + 1 old from setup."
+          res.body.comments.length, 
+          "commentscount is the length of number of comments"
         );
       });
       test('Test POST /api/books/[id] without comment field', 
