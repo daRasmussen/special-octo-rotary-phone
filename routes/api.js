@@ -79,7 +79,7 @@ module.exports = function (app) {
     .post(async function(req, res){
       const _id = req.params.id;
       const comment = req.body.comment;
-      const qid = { "_id": ObjectId(_id) };
+      const qid = { "_id": _id.length > 20 ? ObjectId(_id) : _id};
       await client.connect();
       const c = getCollection();
       const found = await c.findOne(qid);
@@ -101,6 +101,8 @@ module.exports = function (app) {
               );
               const updated = await c.findOne(qid);
               res.status(200).json(updated);
+          } else {
+              res.status(200).send("missing required field comment");
           } 
       } else {
         res.status(200).send("no book exists")

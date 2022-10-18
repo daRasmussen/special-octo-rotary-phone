@@ -81,7 +81,6 @@ suite('Functional Tests', function() {
   /*
   * ----[END of EXAMPLE TEST]----
   */
-
   suite('Routing tests', function() {
     suite(
       'POST /api/books with title => create book object/expect book object', 
@@ -170,30 +169,56 @@ suite('Functional Tests', function() {
       });
     });
     suite('POST /api/books/[id] => add comment/expect book object with id', 
-          function() {
+          async function() {
       test('Test POST /api/books/[id] with comment', async function() {
-        const id = books[0]["_id"];
         const res = await chai
           .request(server)
-          .post(`/api/books/${id}`)
+          .post(`/api/books/${books[0]["_id"]}`)
           .set("content-type", "application/json")
-          .send({ bookid: id, comment: "hej123" });
+          .send({ comment: "hej123" });
         assert.equal(res.status, 200, "response should be 200");
         assert.isTrue(
           res.body.hasOwnProperty("comments"), 
           "response has comments property.");
         assert.equal(
+          res.body.comments.length,
+          1,
+          "added comment should be of length 1"
+        );
+        assert.equal(
           res.body.commentcount, 
           1, 
-          "commentscount is lenght 1"
+          "commentscount is lenght 2, new comment + 1 old from setup."
         );
       });
-      // test('Test POST /api/books/[id] without comment field', 
-      //       async function() {
-      // });
-      // test('Test POST /api/books/[id] with comment, id not in db', 
-      //       async function(){
-      // });
+      test('Test POST /api/books/[id] without comment field', 
+        async function() {
+          const res = await chai
+            .request(server)
+            .post(`/api/books/${books[0]["_id"]}`)
+            .set("content-type", "application/json")
+            .send({});
+          assert.equal(res.status, 200, "response");
+          assert.equal(
+            res.text,
+            "missing required field comment",
+            "comment not set should trigger a response"
+          );
+      });
+      test('Test POST /api/books/[id] with comment, id not in db', 
+        async function() {
+          const res = await chai
+            .request(server)
+            .post("/api/books/123")
+            .set("content-type", "application/json")
+            .set({ "comment": "hej123" });
+          assert.equal(res.status, 200, "should responde with status 200")
+            assert.equal(
+              res.text,
+              "no book exists",
+              "uknown bookid should trigger a response"
+            )
+      });
     });
     
     //suite('DELETE /api/books/[id] => delete book object id', function() {
