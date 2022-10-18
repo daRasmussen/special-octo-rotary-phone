@@ -1,6 +1,11 @@
 class SudokuSolver {
 
   validate(puzzleString) {
+      return puzzleString.length === 81 && puzzleString
+          .split("")
+          .every(
+            (v) => Number(v) || v === "."
+          );
   }
 
   checkRowPlacement(puzzleString, row, column, value) {
