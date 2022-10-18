@@ -31,11 +31,12 @@ const Mocha = require('mocha'),
     fs = require('fs'),
     path = require('path');
 
-const mocha = new Mocha({
-    timeout: 60000,
-    retries: 2,
-    ui: "tdd"
-});
+const mocha = new Mocha(
+    // {
+    //     timeout: 60000,
+    //     slow: 1000,
+    // }
+);
 const testDir = './tests'
 
 // Add each .js file to the mocha instance

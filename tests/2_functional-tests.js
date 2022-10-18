@@ -45,6 +45,7 @@ suite('Functional Tests', function() {
           .request(server)
           .get("/api/books")
           .send();
+      // console.log("books mongo remote: ",storedBooks.body);
       assert.equal(
         storedBooks.body.length, 
         books.length, 
@@ -57,9 +58,11 @@ suite('Functional Tests', function() {
                 (sb) => sb["title"] === b["title"]
               )[0]["_id"];
       });
+      // console.log("books local: ", books);
   });
   teardown(async function() {
-    await flush();
+    const res = await flush();
+    // console.log(res.text);
   });
  /*
   * ----[EXAMPLE TEST]----
@@ -111,7 +114,7 @@ suite('Functional Tests', function() {
            );
         });
     });
-    suite.only('GET /api/books => array of books', function() {
+    suite('GET /api/books => array of books', function() {
       test('Test GET /api/books',  async function() {
         const res = await chai
               .request(server)
@@ -143,7 +146,7 @@ suite('Functional Tests', function() {
         }
       });      
     });
-    suite.only('GET /api/books/[id] => book object with [id]', function() {
+    suite('GET /api/books/[id] => book object with [id]', function() {
       const url = (id) => `/api/books/${id}`;
       test('Test GET /api/books/[id] with id not in db',  async function() {
         const id = 3;

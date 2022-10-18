@@ -20,6 +20,7 @@ const client = new MongoClient(
       serverApi: ServerApiVersion.v1 
     }
 );
+
 const getDBO = () => client.db(dbName);
 const getCollection = () => getDBO().collection(collectionName);
 
