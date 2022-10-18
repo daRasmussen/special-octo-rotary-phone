@@ -109,9 +109,19 @@ module.exports = function (app) {
       }
     })
     
-    .delete(function(req, res){
-      let bookid = req.params.id;
-      //if successful response will be 'delete successful'
+    .delete(async function(req, res){
+      const _id = req.params.id;
+      const qid = { "_id": _id.length > 20 ? ObjectId(_id): _id };
+      await client.connect();
+      const c = getCollection();
+      const { deletedCount } = await c.deleteOne(qid);
+      if (deletedCount === 1) {
+        res.status(200).send("delete successful");
+      } else if (deletedCount > 1) {
+        res.status(200).send("complete delete successful");
+      } else if (deletedCount === 0) {
+        res.status(200).send("no book exists");
+      }
     });
   
 };

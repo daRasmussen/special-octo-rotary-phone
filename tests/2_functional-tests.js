@@ -212,22 +212,56 @@ suite('Functional Tests', function() {
             .post("/api/books/123")
             .set("content-type", "application/json")
             .set({ "comment": "hej123" });
-          assert.equal(res.status, 200, "should responde with status 200")
-            assert.equal(
-              res.text,
-              "no book exists",
-              "uknown bookid should trigger a response"
-            )
+          assert.equal(res.status, 200, "should responde with status 200");
+          assert.equal(
+            res.text,
+            "no book exists",
+            "uknown bookid should trigger a response"
+          );
       });
     });
     
-    //suite('DELETE /api/books/[id] => delete book object id', function() {
-    //  test('Test DELETE /api/books/[id] with valid id in db', function(done){
-    //    //done();
-    //  });
-    //  test('Test DELETE /api/books/[id] with  id not in db', function(done){
-    //    //done();
-    //  });
-    //});
+    suite(
+    'DELETE /api/books/[id] => delete book object id', function() {
+      test(
+      'Test DELETE /api/books/[id] with valid id in db', async function() {
+        const res = await chai
+          .request(server)
+          .delete(`/api/books/${books[0]["_id"]}`)
+          .send();
+        assert.equal(res.status, 200, "should responde with status 200");
+        assert.equal(
+          res.text,
+          "delete successful",
+          "should prompt that an book has been deleted"
+        );
+      });
+      test(
+      'Test DELETE /api/books/[id] with id not in db', async function() {
+         const res = await chai
+          .request(server)
+          .delete("/api/books/123")
+          .send();
+         assert.equal(res.status, 200, "should responde with status 200");
+         assert.equal(
+           res.text,
+           "no book exists",
+           "should responde that book does not exists"
+         );
+      });
+      test(
+      'Test DELETE /api/books/ to delete all', async function() {
+        const res = await chai
+          .request(server)
+          .delete("/api/books")
+          .send();
+        assert.equal(res.status, 200, "should responde with status 200")
+        assert.equal(
+            res.text,
+            "complete delete successful",
+            "should prompt that a complete delete has been successful"
+        );
+      });
+    });
   });
 });
