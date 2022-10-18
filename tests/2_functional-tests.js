@@ -143,7 +143,7 @@ suite('Functional Tests', function() {
         }
       });      
     });
-    suite('GET /api/books/[id] => book object with [id]', function() {
+    suite.only('GET /api/books/[id] => book object with [id]', function() {
       const url = (id) => `/api/books/${id}`;
       test('Test GET /api/books/[id] with id not in db',  async function() {
         const id = 3;
@@ -165,7 +165,23 @@ suite('Functional Tests', function() {
           .get(url(id))
           .send();
         assert.equal(res.status, 200, "response should be 200");
-        assert.equal(id, res.body["_id"]);
+        assert.equal(
+          id, 
+          res.body["_id"],
+          "reponse has same id that requested"
+        );
+        assert.isDefined(
+          res.body["title"],
+          "response has a title"
+         );
+        assert.isDefined(
+          res.body["commentcount"], 
+          "reponse has a commentcount"
+        );
+        assert.isDefined(
+          res.body["comments"],
+          "response has commments"
+        );
       });
     });
     suite('POST /api/books/[id] => add comment/expect book object with id', 

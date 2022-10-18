@@ -70,7 +70,12 @@ module.exports = function (app) {
       const c = getCollection();
       const found = await c.findOne({ "_id": ObjectId(_id) });
       if(found) {
-        res.status(200).json(found);
+        res.status(200).json({
+            "_id": found["_id"],
+            "title": found["title"],
+            "commentcount": found["commentcount"],
+            "comments": found["comments"] ||  []
+        });
       } else {
         res.status(200).send("no book exists");
       }
