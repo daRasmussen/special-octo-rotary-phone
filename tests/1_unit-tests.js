@@ -38,6 +38,40 @@ suite('Unit Tests', () => {
             "80 characters with illegal charcters should validate to false"
         );
         done();
-    }
-    );
+    });
+    test(
+    "Logic handles a puzzle string that is not 81 characters in length", 
+    function(done) {
+        // generate a string with 80 characters
+        // How to generate a string with 80 characters?
+        
+        let aStr = "";
+
+        for (let i = 0; i < 81; i++) {
+            assert.equal(
+                solver.validate(aStr),
+                false,
+                "Characters length below 81 should validate to false"
+            
+            );
+            aStr += ".";
+        }
+        assert.equal(
+            solver.validate(aStr),
+            true,
+            "Excatly 81 characters should validate to true"
+        );
+
+        aStr += ".";
+        for (let i = 0; i < 100; i++) {
+            assert.equal(
+                solver.validate(aStr),
+                false,
+                "characters length above 81 should validate to false"
+            );
+            aStr += ".";
+        }
+
+        done();
+    });
 });

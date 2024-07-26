@@ -18,7 +18,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 //Index page (static HTML)
 app.route('/')
-  .get(function (req, res) {
+  .get(function (_, res) {
     res.sendFile(process.cwd() + '/views/index.html');
   });
 

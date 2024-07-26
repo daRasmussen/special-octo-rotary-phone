@@ -1,11 +1,13 @@
 class SudokuSolver {
 
   validate(puzzleString) {
-      return puzzleString.length === 81 && puzzleString
-          .split("")
-          .every(
-            (v) => Number(v) || v === "."
-          );
+      return puzzleString.length === 81 && /^[1-9.]*$/.test(puzzleString);
+
+      //return puzzleString.length === 81 && puzzleString
+      //    .split("")
+      //    .every(
+      //      (v) => Number(v) || v === "."
+      //    );
   }
 
   checkRowPlacement(puzzleString, row, column, value) {
