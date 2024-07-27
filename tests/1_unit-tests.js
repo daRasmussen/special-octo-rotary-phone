@@ -7,4 +7,5 @@ const solver = new Solver();
 suite('Unit Tests', () => {
     require("./valid-test.js");
     require("./rowPlacement-test.js");
+    require("./colPlacement-test.js");
 });

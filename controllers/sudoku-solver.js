@@ -1,4 +1,5 @@
 const Row = require("../lib/row.js");
+const Cols = require("../lib/cols.js");
 
 const rows = {
   1: new Row(1),
@@ -12,43 +13,57 @@ const rows = {
   9: new Row(9),
 };
 
+function loadRows(puzzleString) {
+  const firstRow = puzzleString.slice(0, 9);
+  const secondRow = puzzleString.slice(9, 18);
+  const thirdRow = puzzleString.slice(18, 27);
+  const fourthRow = puzzleString.slice(27, 36);
+  const fifthRow = puzzleString.slice(36, 45);
+  const sixthRow = puzzleString.slice(45, 54);
+  const seventhRow = puzzleString.slice(54, 63);
+  const eighthRow = puzzleString.slice(63, 72);
+  const ninthRow = puzzleString.slice(72, 81);
+
+  rows[1].loadString(firstRow);
+  rows[2].loadString(secondRow);
+  rows[3].loadString(thirdRow);
+  rows[4].loadString(fourthRow);
+  rows[5].loadString(fifthRow);
+  rows[6].loadString(sixthRow);
+  rows[7].loadString(seventhRow);
+  rows[8].loadString(eighthRow);
+  rows[9].loadString(ninthRow);
+}
+
 class SudokuSolver {
   validate(puzzleString) {
     return puzzleString.length === 81 && /^[1-9.]*$/.test(puzzleString);
   }
 
-  checkRowPlacement(puzzleString, row, value) {
-    const firstRow = puzzleString.slice(0, 9);
-    const secondRow = puzzleString.slice(9, 18);
-    const thirdRow = puzzleString.slice(18, 27);
-    const fourthRow = puzzleString.slice(27, 36);
-    const fifthRow = puzzleString.slice(36, 45);
-    const sixthRow = puzzleString.slice(45, 54);
-    const seventhRow = puzzleString.slice(54, 63);
-    const eighthRow = puzzleString.slice(63, 72);
-    const ninthRow = puzzleString.slice(72, 81);
-
-    rows[1].loadString(firstRow);
-    rows[2].loadString(secondRow);
-    rows[3].loadString(thirdRow);
-    rows[4].loadString(fourthRow);
-    rows[5].loadString(fifthRow);
-    rows[6].loadString(sixthRow);
-    rows[7].loadString(seventhRow);
-    rows[8].loadString(eighthRow);
-    rows[9].loadString(ninthRow);
+  // column should be pass in here as well
+  checkRowPlacement(puzzleString, row, column, value) {
+    loadRows(puzzleString);
 
     const tmp = rows[row];
     for (let i = 1; i <= 9; i++) {
-      // Check if value is already in row
-      if (tmp.getValueAt(i) === value) {
+      // Check if value is already in row and column is not the same as the column we are checking
+      if (tmp.getValueAt(i) === value && i !== column) {
         return false;
       }
     }
     return true;
   }
 
-  checkColPlacement(puzzleString, row, column, value) {}
+  checkColPlacement(puzzleString, row, column, value) {
+    loadRows(puzzleString);
+
+    for (let i = 1; i <= 9; i++) {
+      if (rows[i].getValueAt(column) === value && i !== row) {
+        return false;
+      }
+    }
+    return true;
+  }
 
   checkRegionPlacement(puzzleString, row, column, value) {}
 

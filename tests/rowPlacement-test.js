@@ -17,11 +17,12 @@ const puzzleArray = [
 ];
 suite("Row placement", () => {
   for (let i = 1; i <= 9; i++) {
-    test(`Logic handles a valid row placement number ${i} is not in the row`, function (done) {
+    test(`Logic handles a valid row placement number ${i} is not in the row ${i} and column ${i}`, function (done) {
       const puzzle = puzzleArray.join("");
       const row = i;
       const value = i;
-      const res = solver.checkRowPlacement(puzzle, row, value);
+      const column = i;
+      const res = solver.checkRowPlacement(puzzle, row, column, value);
       assert.equal(
         res,
         true,
@@ -29,15 +30,16 @@ suite("Row placement", () => {
       );
       done();
     });
-    test(`Logic handles an invalid row placement number ${10 - i} is in the row`, function (done) {
-      if(10 - i === 5) {
+    test(`Logic handles an invalid row placement number ${10 - i} is in the row ${i} and column ${i}`, function (done) {
+      if (10 - i === 5) {
         // Skip 5 because we don't have it in the puzzle
         done();
       }
       const puzzle = puzzleArray.join("");
       const row = i;
+      const column = i;
       const value = 10 - i;
-      const res = solver.checkRowPlacement(puzzle, row, value);
+      const res = solver.checkRowPlacement(puzzle, row, column, value);
       assert.equal(
         res,
         false,

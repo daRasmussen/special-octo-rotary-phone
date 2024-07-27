@@ -139,4 +139,52 @@ suite("Row", () => {
     assert.equal(row2.index, 2);
     done();
   });
+  /* Get By row and column */
+  test("Get value based on row and column in a grid", function(done) {
+    const data1 = "123456789";
+    const data2 = "987654321";
+    const data3 = "123456789";
+    const data4 = "987654321";
+    const data5 = "1234.6789";
+    const data6 = "987654321";
+    const data7 = "123456789";
+    const data8 = "987654321";
+    const data9 = "12345678.";
+
+    const rows = {
+      1: new Row(1),
+      2: new Row(2),
+      3: new Row(3),
+      4: new Row(4),
+      5: new Row(5),
+      6: new Row(6),
+      7: new Row(7),
+      8: new Row(8),
+      9: new Row(9),
+    };
+
+    rows[1].loadString(data1);
+    rows[2].loadString(data2);
+    rows[3].loadString(data3);
+    rows[4].loadString(data4);
+    rows[5].loadString(data5);
+    rows[6].loadString(data6);
+    rows[7].loadString(data7);
+    rows[8].loadString(data8);
+    rows[9].loadString(data9);
+
+
+    const row = 5;
+    const col = 5;
+    const expected = ".";
+    const actual = rows[row].getValueAt(col);
+    assert.equal(actual, expected);
+
+    const row2 = 9;
+    const col2 = 9;
+    const expected2 = ".";
+    const actual2 = rows[row2].getValueAt(col2);
+
+    done();
+  });
 });
