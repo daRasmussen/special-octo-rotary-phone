@@ -33,6 +33,11 @@ function loadRows(puzzleString) {
   rows[7].loadString(seventhRow);
   rows[8].loadString(eighthRow);
   rows[9].loadString(ninthRow);
+
+  return {
+    rows: rows,
+    cols: new Cols(rows),
+  };
 }
 
 class SudokuSolver {
@@ -40,13 +45,11 @@ class SudokuSolver {
     return puzzleString.length === 81 && /^[1-9.]*$/.test(puzzleString);
   }
 
-  // column should be pass in here as well
   checkRowPlacement(puzzleString, row, column, value) {
     loadRows(puzzleString);
 
     const tmp = rows[row];
     for (let i = 1; i <= 9; i++) {
-      // Check if value is already in row and column is not the same as the column we are checking
       if (tmp.getValueAt(i) === value && i !== column) {
         return false;
       }
@@ -65,7 +68,9 @@ class SudokuSolver {
     return true;
   }
 
-  checkRegionPlacement(puzzleString, row, column, value) {}
+  checkRegionPlacement(puzzleString, row, column, value) {
+    const { rows, cols } = loadRows(puzzleString);
+  }
 
   solve(puzzleString) {}
 }
